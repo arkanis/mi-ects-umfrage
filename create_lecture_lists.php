@@ -15,8 +15,8 @@ $course_ids = array(
 	'Computer Science and Media (Master)' => '350013',
 	'Medieninformatik (Bachelor)' => '250009',
 	'Medieninformatik (Bachelor, 7 Semester)' => '550033',
-	'Medienwirtschaft (Bachelor)' => '250006',
-	'Medienwirtschaft (Bachelor, 7 Semester)' => '550039'
+	'Mobile Medien (Studienstart vor WS11/12)' => '550027',
+	'Mobile Medien (Bachelor, 7 Semester)' => '550041'
 );
 
 function tidy_and_parse_html_page($url, $xpath_selector){
@@ -65,7 +65,7 @@ foreach($course_ids as $course_name => $course_id) {
 		);
 	}
 	
-	file_put_contents($course_name . '.json', json_encode($list));
+	file_put_contents(urlencode($course_name) . '.json', json_encode($list));
 }
 
 ?>

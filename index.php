@@ -71,7 +71,7 @@ uasort($personal_lectures, function($a, $b){
 // Fetch it from there and use it to load the prepared lecture list
 $course_name = parse_html_page('https://www.hdm-stuttgart.de/studenten/stundenplan/pers_stundenplan/pers_daten', "//div[@id='center_content']//label[@for='sgang_wahl']");
 $course_name = trim(preg_replace('/^Ihr Studiengang\: /', '', $course_name));
-$course_lectures = json_decode(@file_get_contents($course_name . '.json'), true);
+$course_lectures = json_decode(@file_get_contents(urlencode($course_name) . '.json'), true);
 
 // Remove course lectures already in the personal lecture list
 foreach($personal_lectures as $edvnr => $lecture)
