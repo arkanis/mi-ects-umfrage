@@ -1,20 +1,20 @@
 <?php
 
-$user = 'xy123';
-$pass = 'secret';
+$user = $_SERVER['PHP_AUTH_USER'];
+$pass = $_SERVER['PHP_AUTH_PW'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$user_data = array();
 	foreach($_POST as $edvnr => $ects) {
 		if ( !empty($ects) )
-			$user_data[$edvnr] = $ects;
+			$user_data[strval($edvnr)] = $ects;
 	}
 	file_put_contents("data/$user.json", json_encode($user_data));
 	
 	$proto = $_SERVER['HTTPS'] ? 'https' : 'http';
 	$server = $_SERVER['SERVER_NAME'];
 	$path = $_SERVER['PHP_SELF'];
-	header("Location: $proto://$server$path", true, 303);
+	header("Location: $proto://$server$path", true, 302);
 	exit();
 }
 
@@ -69,16 +69,13 @@ uasort($personal_lectures, function($a, $b){
 
 // The course name is shown on the page to change the personal data...
 // Fetch it from there and use it to load the prepared lecture list
-
 $course_name = parse_html_page('https://www.hdm-stuttgart.de/studenten/stundenplan/pers_stundenplan/pers_daten', "//div[@id='center_content']//label[@for='sgang_wahl']");
 $course_name = trim(preg_replace('/^Ihr Studiengang\: /', '', $course_name));
 $course_lectures = json_decode(@file_get_contents($course_name . '.json'), true);
 
 // Remove course lectures already in the personal lecture list
-foreach($course_lectures as $evdnr => $lecture){
-	if ( array_key_exists($edvnr, $personal_lectures) )
-		unset($course_lectures[$edvnr]);
-}
+foreach($personal_lectures as $edvnr => $lecture)
+	unset($course_lectures[$edvnr]);
 
 // Sort lectures by name
 uasort($course_lectures, function($a, $b){
@@ -94,6 +91,9 @@ if ($user_data_json)
 else
 	$user_data = array();
 
+// Prevent browsers from caching the page. Neccessary because we insert the last user
+// input into the HTML directly.
+header('Cache-Control: no-cache');
 ?>
 <!DOCTYPE html>
 <html>
@@ -109,8 +109,9 @@ else
 		h1:first-of-type { margin-top: 0; }
 		
 		table { table-layout: fixed; border-collapse: collapse; }
+		table tr:nth-of-type(even) { background-color: hsl(0, 0%, 95%); }
 		table th:nth-of-type(1) { width: 5em; }
-		table th:nth-of-type(2) { width: 30em; }
+		table th:nth-of-type(2) { width: 32.5em; }
 		table th:nth-of-type(3) { width: 6.5em; }
 		table th:nth-of-type(4) { width: 6.5em; }
 		
@@ -120,9 +121,13 @@ else
 		table td input:invalid { border-color: red; background-color: hsl(0, 50%, 95%); }
 		
 		table td textarea { display: none; }
-		table tr.not-empty td textarea { display: block; width: 41.75em; margin: 0.25em 0 0 -36.75em; }
+		table tr.not-empty td textarea { display: block; width: 44.25em; min-height: 4em; margin: 0.25em 0 0 -39.25em; }
 		
 		input, textarea { font: inherit; font-size: 1em; box-sizing: border-box; margin: 0; padding: 1px; white-space: normal; }
+		
+		form { margin: 1em 0; padding: 0 0 1.5em 0; }
+		form p { position: fixed; left: 0; right: 0; bottom: 0; margin: 0; padding: 0.5em;
+			background: white; box-shadow: 0 0 10px black; }
 	</style>
 	<script src="jquery-2.0.2.min.js"></script>
 	<script>
@@ -178,7 +183,7 @@ else
 			<td><?= $lecture['ects'] ?></td>
 			<td>
 				<input type="number" name="<?= $edvnr ?>" value="<?= @$user_data[$edvnr] ?>" />
-				<textarea name="<?= $edvnr ?>_reason" placeholder="Optional: Begründung warum die ECTS zu hoch oder zu niedrig sind"><?= @$user_data[$edvnr . '_reason'] ?></textarea>
+				<textarea name="<?= $edvnr ?>_reason" placeholder="Optional: Wann ihr die Vorlesung besucht habt und Begründung warum die ECTS zu hoch oder zu niedrig sind"><?= @$user_data[$edvnr . '_reason'] ?></textarea>
 			</td>
 		</tr>
 <?		endforeach ?>
