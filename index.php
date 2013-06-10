@@ -1,6 +1,6 @@
 <?php
 
-$user = $_SERVER['PHP_AUTH_USER'];
+$user = basename($_SERVER['PHP_AUTH_USER']);
 $pass = $_SERVER['PHP_AUTH_PW'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if ( !empty($ects) )
 			$user_data[strval($edvnr)] = $ects;
 	}
-	file_put_contents("data/$user.json", json_encode($user_data));
+	file_put_contents("../../data/$user.json", json_encode($user_data));
 	
 	$proto = $_SERVER['HTTPS'] ? 'https' : 'http';
 	$server = $_SERVER['SERVER_NAME'];
@@ -85,7 +85,7 @@ uasort($course_lectures, function($a, $b){
 });
 
 // Read previous user data if it exists
-$user_data_json = @file_get_contents("data/$user.json");
+$user_data_json = @file_get_contents("../../data/$user.json");
 if ($user_data_json)
 	$user_data = json_decode($user_data_json, true);
 else
@@ -105,8 +105,9 @@ header('Cache-Control: no-cache');
 		html, body { margin: 0; padding: 0; }
 		body { padding: 1em; color: #333; font-size: small; font-family: sans-serif; }
 		
-		h1 { font-size: 1.5em; margin: 1em 0 0.5em 0; }
-		h1:first-of-type { margin-top: 0; }
+		h1 { font-size: 1.75em; margin: 0; padding: 0; }
+		h2 { font-size: 1.5em; margin: 1em 0 0.5em 0; }
+		h2:first-of-type { margin-top: 0; }
 		
 		table { table-layout: fixed; border-collapse: collapse; }
 		table tr:nth-of-type(even) { background-color: hsl(0, 0%, 95%); }
@@ -125,6 +126,7 @@ header('Cache-Control: no-cache');
 		
 		input, textarea { font: inherit; font-size: 1em; box-sizing: border-box; margin: 0; padding: 1px; white-space: normal; }
 		
+		kbd { padding: 1px 2px; border: 1px outset hsl(0, 0%, 75%); background: hsl(0, 0%, 95%); }
 		form { margin: 1em 0; padding: 0 0 1.5em 0; }
 		form p { position: fixed; left: 0; right: 0; bottom: 0; margin: 0; padding: 0.5em;
 			background: white; box-shadow: 0 0 10px black; }
@@ -144,8 +146,12 @@ header('Cache-Control: no-cache');
 </head>
 <body>
 
+<h1>MI ECTS Umfrage</h1>
+
+<p>Bitte benutzt die Browsersuche (<kbd>Strg</kbd> + <kbd>f</kbd>) um schnell eine Vorlesung zu finden.</p>
+
 <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
-	<h1>Vorlesungen im persönlichen Stundenplan</h1>
+	<h2>Vorlesungen im persönlichen Stundenplan</h2>
 	
 	<table>
 		<tr>
@@ -160,14 +166,14 @@ header('Cache-Control: no-cache');
 			<td><?= $lecture['name'] ?></td>
 			<td><?= $lecture['ects'] ?></td>
 			<td>
-				<input type="number" name="<?= $edvnr ?>" value="<?= @$user_data[$edvnr] ?>_ps" />
+				<input type="number" name="<?= $edvnr ?>_ps" value="<?= @$user_data[$edvnr . '_ps'] ?>" />
 				<textarea name="<?= $edvnr ?>_reason" placeholder="Optional: Begründung warum die ECTS zu hoch oder zu niedrig sind"><?= @$user_data[$edvnr . '_reason'] ?></textarea>
 			</td>
 		</tr>
 <?		endforeach ?>
 	</table>
 	
-	<h1>Restliche Vorlesungen von <?= $course_name ?></h1>
+	<h2>Restliche Vorlesungen von <?= $course_name ?></h2>
 	
 	<table>
 		<tr>
