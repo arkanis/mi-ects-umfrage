@@ -69,6 +69,7 @@ uasort($personal_lectures, function($a, $b){
 
 // The course name is shown on the page to change the personal data...
 // Fetch it from there and use it to load the prepared lecture list
+
 $course_name = parse_html_page('https://www.hdm-stuttgart.de/studenten/stundenplan/pers_stundenplan/pers_daten', "//div[@id='center_content']//label[@for='sgang_wahl']");
 $course_name = trim(preg_replace('/^Ihr Studiengang\: /', '', $course_name));
 $course_lectures = json_decode(@file_get_contents($course_name . '.json'), true);
@@ -107,13 +108,21 @@ else
 		h1 { font-size: 1.5em; margin: 1em 0 0.5em 0; }
 		h1:first-of-type { margin-top: 0; }
 		
-		table { table-layout: fixed; }
-		table > tr > th:nth-child(0) { width: 5em; }
-		table > tr:nth-child(odd) > td { background-color: gray; }
+		table { table-layout: fixed; border-collapse: collapse; }
+		table th:nth-of-type(1) { width: 5em; }
+		table th:nth-of-type(2) { width: 30em; }
+		table th:nth-of-type(3) { width: 6.5em; }
+		table th:nth-of-type(4) { width: 6.5em; }
 		
-		tr textarea { display: none; }
-		tr.not-empty textarea { display: block; }
-		input:invalid { border: 1px solid red; }
+		table td:nth-of-type(3) { text-align: center; }
+		table td { vertical-align: top; padding: 0.25em 0; }
+		table td input { display: block; border: 1px inset gray; width: 5em; }
+		table td input:invalid { border-color: red; background-color: hsl(0, 50%, 95%); }
+		
+		table td textarea { display: none; }
+		table tr.not-empty td textarea { display: block; width: 41.75em; margin: 0.25em 0 0 -36.75em; }
+		
+		input, textarea { font: inherit; font-size: 1em; box-sizing: border-box; margin: 0; padding: 1px; white-space: normal; }
 	</style>
 	<script src="jquery-2.0.2.min.js"></script>
 	<script>
