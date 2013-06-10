@@ -118,13 +118,13 @@ header('Cache-Control: no-cache');
 		
 		table td:nth-of-type(3) { text-align: center; }
 		table td { vertical-align: top; padding: 0.25em 0; }
-		table td input { display: block; border: 1px inset gray; width: 5em; }
+		table td input { display: block; width: 5em; }
 		table td input:invalid { border-color: red; background-color: hsl(0, 50%, 95%); }
 		
 		table td textarea { display: none; }
 		table tr.not-empty td textarea { display: block; width: 44.25em; min-height: 4em; margin: 0.25em 0 0 -39.25em; }
 		
-		input, textarea { font: inherit; font-size: 1em; box-sizing: border-box; margin: 0; padding: 1px; white-space: normal; }
+		input, textarea { font: inherit; font-size: 1em; box-sizing: border-box; margin: 0; padding: 1px; border: 1px inset gray; white-space: normal; }
 		
 		kbd { padding: 1px 2px; border: 1px outset hsl(0, 0%, 75%); background: hsl(0, 0%, 95%); }
 		form { margin: 1em 0; padding: 0 0 1.5em 0; }
@@ -149,6 +149,7 @@ header('Cache-Control: no-cache');
 <h1>MI ECTS Umfrage</h1>
 
 <p>Bitte benutzt die Browsersuche (<kbd>Strg</kbd> + <kbd>f</kbd>) um schnell eine Vorlesung zu finden.</p>
+<p>Du kannst beliebig oft speichern, leere Felder werden gelöscht.</p>
 
 <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
 	<h2>Vorlesungen im persönlichen Stundenplan</h2>
