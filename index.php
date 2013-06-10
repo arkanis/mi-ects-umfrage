@@ -160,7 +160,7 @@ header('Cache-Control: no-cache');
 			<td><?= $lecture['name'] ?></td>
 			<td><?= $lecture['ects'] ?></td>
 			<td>
-				<input type="number" name="<?= $edvnr ?>" value="<?= @$user_data[$edvnr] ?>" />
+				<input type="number" name="<?= $edvnr ?>" value="<?= @$user_data[$edvnr] ?>_ps" />
 				<textarea name="<?= $edvnr ?>_reason" placeholder="Optional: Begründung warum die ECTS zu hoch oder zu niedrig sind"><?= @$user_data[$edvnr . '_reason'] ?></textarea>
 			</td>
 		</tr>
