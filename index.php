@@ -99,7 +99,7 @@ header('Cache-Control: no-cache');
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>MI ECTS Umfrage</title>
+	<title>MI ECTS Liste</title>
 	<meta name="author" content="Stephan Soller <ss312@hdm-stuttgart.de>">
 	<style>
 		html, body { margin: 0; padding: 0; }
@@ -129,7 +129,8 @@ header('Cache-Control: no-cache');
 		
 		kbd { padding: 1px 2px; border: 1px outset hsl(0, 0%, 75%); background: hsl(0, 0%, 95%); }
 		form { margin: 1em 0; padding: 0 0 1.5em 0; }
-		form p { position: fixed; left: 0; right: 0; bottom: 0; margin: 0; padding: 0.5em;
+		form footer { margin: 0.5em 0; padding: 0; }
+		form p:last-child { position: fixed; left: 0; right: 0; bottom: 0; margin: 0; padding: 0.5em;
 			background: white; box-shadow: 0 0 10px black; }
 	</style>
 	<script src="jquery-2.0.2.min.js"></script>
@@ -147,7 +148,7 @@ header('Cache-Control: no-cache');
 </head>
 <body>
 
-<h1>MI ECTS Umfrage</h1>
+<h1>MI ECTS Liste</h1>
 
 <p>Bitte benutzt die Browsersuche (<kbd>Strg</kbd> + <kbd>f</kbd>) um schnell eine Vorlesung zu finden.</p>
 <p>Du kannst die Seite beliebig oft aufrufen, ändern und speichern (Button unten).</p>
@@ -204,6 +205,8 @@ header('Cache-Control: no-cache');
 		</tr>
 <?		endforeach ?>
 	</table>
+	
+	<footer>Source code der Liste ist <a href="https://github.com/arkanis/mi-ects-umfrage">bei GitHub online</a>.</footer>
 	
 	<p>
 		<button>Speichern</button>
