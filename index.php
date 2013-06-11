@@ -115,10 +115,11 @@ header('Cache-Control: no-cache');
 		table th:nth-of-type(2) { width: 32.5em; }
 		table th:nth-of-type(3) { width: 6.5em; }
 		table th:nth-of-type(4) { width: 6.5em; }
+		table th:nth-of-type(5) { width: 10em; }
 		
-		table td:nth-of-type(3) { text-align: center; }
+		table td:nth-of-type(3), table td:nth-of-type(5) { text-align: center; }
 		table td { vertical-align: top; padding: 0.25em 0; }
-		table td input { display: block; width: 5em; }
+		table td input[type="number"] { display: block; width: 5em; }
 		table td input:invalid { border-color: red; background-color: hsl(0, 50%, 95%); }
 		
 		table td textarea { display: none; }
@@ -140,7 +141,7 @@ header('Cache-Control: no-cache');
 				else
 					$(this).closest('tr').removeClass('not-empty');
 			};
-			$('input').keyup(change_handler).change(change_handler).each(change_handler);
+			$('input[type=number]').keyup(change_handler).change(change_handler).each(change_handler);
 		});
 	</script>
 </head>
@@ -149,7 +150,7 @@ header('Cache-Control: no-cache');
 <h1>MI ECTS Umfrage</h1>
 
 <p>Bitte benutzt die Browsersuche (<kbd>Strg</kbd> + <kbd>f</kbd>) um schnell eine Vorlesung zu finden.</p>
-<p>Du kannst beliebig oft speichern, leere Felder werden gelöscht.</p>
+<p>Du kannst die Seite beliebig oft aufrufen, ändern und speichern (Button unten).</p>
 
 <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
 	<h2>Vorlesungen im persönlichen Stundenplan</h2>
@@ -160,6 +161,7 @@ header('Cache-Control: no-cache');
 			<th>Vorlesung</th>
 			<th>Bisherige ECTS</th>
 			<th>Realistische ECTS</th>
+			<th>Nur belegt um Punkte zu sammeln</th>
 		</tr>
 <?		foreach($personal_lectures as $edvnr => $lecture): ?>
 		<tr>
@@ -168,7 +170,10 @@ header('Cache-Control: no-cache');
 			<td><?= $lecture['ects'] ?></td>
 			<td>
 				<input type="number" name="<?= $edvnr ?>_ps" value="<?= @$user_data[$edvnr . '_ps'] ?>" />
-				<textarea name="<?= $edvnr ?>_reason" placeholder="Optional: Begründung warum die ECTS zu hoch oder zu niedrig sind"><?= @$user_data[$edvnr . '_reason'] ?></textarea>
+				<textarea name="<?= $edvnr ?>_reason" placeholder="Optionale Bemerkung, z.B. Begründung warum die ECTS zu hoch oder zu niedrig sind, usw."><?= @$user_data[$edvnr . '_reason'] ?></textarea>
+			</td>
+			<td>
+				<input type="checkbox" value="y" name="<?= $edvnr ?>_ps_forced"<? if( isset($user_data[$edvnr . '_ps_forced']) ): ?> checked="checked"<? endif ?> />
 			</td>
 		</tr>
 <?		endforeach ?>
@@ -182,6 +187,7 @@ header('Cache-Control: no-cache');
 			<th>Vorlesung</th>
 			<th>Bisherige ECTS</th>
 			<th>Realistische ECTS</th>
+			<th>Nur belegt um Punkte zu sammeln</th>
 		</tr>
 <?		foreach($course_lectures as $edvnr => $lecture): ?>
 		<tr>
@@ -190,7 +196,10 @@ header('Cache-Control: no-cache');
 			<td><?= $lecture['ects'] ?></td>
 			<td>
 				<input type="number" name="<?= $edvnr ?>" value="<?= @$user_data[$edvnr] ?>" />
-				<textarea name="<?= $edvnr ?>_reason" placeholder="Optional: Wann ihr die Vorlesung besucht habt und Begründung warum die ECTS zu hoch oder zu niedrig sind"><?= @$user_data[$edvnr . '_reason'] ?></textarea>
+				<textarea name="<?= $edvnr ?>_reason" placeholder="Optionale Bemerkung, z.B. wann du die Vorlesung besucht hast, Begründung warum die ECTS zu hoch oder zu niedrig sind, usw."><?= @$user_data[$edvnr . '_reason'] ?></textarea>
+			</td>
+			<td>
+				<input type="checkbox" value="y" name="<?= $edvnr ?>_ps_forced"<? if( isset($user_data[$edvnr . '_ps_forced']) ): ?> checked="checked"<? endif ?> />
 			</td>
 		</tr>
 <?		endforeach ?>
