@@ -219,7 +219,7 @@ foreach($courses as $course_name => &$lectures){
 		<td><?= $edvnr ?></td>
 		<td><a href="#"><?= $lecture['name'] ?></a></td>
 		<td><?= $lecture['ects'] ?></td>
-		<td><?= $lecture['mean_ects'] ?></td>
+		<td><?= round($lecture['mean_ects']) ?></td>
 		<td><?= round($lecture['mean_diff'] * 100) ?>%</td>
 		<td class="distribution"><?= join(',', $lecture['distribution']) ?></span>
 	</tr>
