@@ -129,9 +129,9 @@ foreach($courses as $course_name => &$lectures){
 	
 	// Sort by lecture name
 	uasort($lectures, function($a, $b){
-		if ( $a['mean_diff'] == $b['mean_diff'] )
+		if ( count($a['records']) == count($b['records']) )
 			return 0;
-		return ($a['mean_diff'] > $b['mean_diff']) ? -1 : 1;
+		return (count($a['records']) > count($b['records'])) ? -1 : 1;
 	});
 }
 
@@ -155,10 +155,8 @@ foreach($courses as $course_name => &$lectures){
 		
 		table th:nth-of-type(1) { width: 5em; }
 		table th:nth-of-type(2) { width: 32.5em; }
-		table th:nth-of-type(3), table th:nth-of-type(4) { width: 6.5em; }
-		table th:nth-of-type(5) { width: 9em; }
-		table th:nth-of-type(6) { width: 6.5em; }
-		table tr.records td { width: 66em; }
+		table th:nth-of-type(3), table th:nth-of-type(4), table th:nth-of-type(5), table th:nth-of-type(6) { width: 6.5em; }
+		table tr.records td { width: 63.5em; }
 		
 		table td { padding: 0.25em 0; }
 		table td:nth-of-type(3), table td:nth-of-type(4), table td:nth-of-type(5) { text-align: center; }
@@ -185,7 +183,7 @@ foreach($courses as $course_name => &$lectures){
 			$('.distribution').sparkline('html', {
 				type: 'bar',
 				tooltipFormatter: function(sparkline, options, fields){
-					return fields[0].value + ' Stimmen für ' + fields[0].offset + ' ECTS';
+					return fields[0].value + ' Einträge mit ' + fields[0].offset + ' ECTS';
 				}
 			});
 			
@@ -211,7 +209,7 @@ foreach($courses as $course_name => &$lectures){
 		<th>Vorlesung</th>
 		<th>ECTS eingetragen</th>
 		<th><abbr title="Durschnittliche ECTS aller Einträge von Studenten">ECTS Durchschnitt</abbr></th>
-		<th>Abweichung vom Durchschnitt</th>
+		<th>Einträge</th>
 		<th>Verteilung</th>
 	</tr>
 <?	foreach($lectures as $edvnr => $lecture): ?>
@@ -220,7 +218,7 @@ foreach($courses as $course_name => &$lectures){
 		<td><a href="#"><?= $lecture['name'] ?></a></td>
 		<td><?= $lecture['ects'] ?></td>
 		<td><?= round($lecture['mean_ects']) ?></td>
-		<td><?= round($lecture['mean_diff'] * 100) ?>%</td>
+		<td><?= count($lecture['records']) ?></td>
 		<td class="distribution"><?= join(',', $lecture['distribution']) ?></span>
 	</tr>
 	<tr class="records">
