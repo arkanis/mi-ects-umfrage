@@ -175,7 +175,7 @@ foreach($courses as $course_name => &$lectures){
 		table tr.records ul li abbr span.forced { position: absolute; left: 3.75em; top: 1.25em; }
 		table tr.records ul li abbr.ps { border-style: dashed; }
 		table tr.records ul li abbr.forced { background-color: hsl(0, 50%, 90%); }
-		table tr.records ul li p { margin: 0 0 0 7.5em; padding: 0; min-height: 3em; }
+		table tr.records ul li p { margin: 0 0 0 7.5em; padding: 0; min-height: 3em; white-space: pre-line; }
 		table tr.records ul li p.empty { color: gray; font-style: italic; }
 	</style>
 	<script src="jquery-2.0.2.min.js"></script>
