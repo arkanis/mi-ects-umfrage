@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$proto = $_SERVER['HTTPS'] ? 'https' : 'http';
 	$server = $_SERVER['SERVER_NAME'];
 	$path = $_SERVER['PHP_SELF'];
-	header("Location: $proto://$server$path", true, 302);
+	header("Location: $proto://$server$path?saved", true, 302);
 	exit();
 }
 
@@ -132,6 +132,8 @@ header('Cache-Control: no-cache');
 		form footer { margin: 0.5em 0; padding: 0; }
 		form p:last-child { position: fixed; left: 0; right: 0; bottom: 0; margin: 0; padding: 0.5em;
 			background: white; box-shadow: 0 0 10px black; }
+		form p:last-child em { color: hsl(0, 50%, 25%); }
+		form p:last-child a { float: right; line-height: 1.75em; }
 	</style>
 	<script src="jquery-2.0.2.min.js"></script>
 	<script>
@@ -143,6 +145,8 @@ header('Cache-Control: no-cache');
 					$(this).closest('tr').removeClass('not-empty');
 			};
 			$('input[type=number]').keyup(change_handler).change(change_handler).each(change_handler);
+			
+			$('form p:last-child em').delay(3000).fadeOut(3000);
 		});
 	</script>
 </head>
@@ -210,6 +214,10 @@ header('Cache-Control: no-cache');
 	
 	<p>
 		<button>Speichern</button>
+<?		if ( isset($_GET['saved']) ): ?>
+		<em>gespeichert</em>
+<?		endif ?>
+		<a href="results.php">Ergebnisse ansehen</a>
 	</p>
 </form>
 

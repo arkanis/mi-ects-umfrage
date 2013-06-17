@@ -6,6 +6,7 @@
 // For now use the original data so people can see the current state.
 //
 
+$participant_count = count(glob("../../data/*.json"));
 $data = array();
 foreach( glob("../../data/*.json") as $path ){
 	$user_data = json_decode( file_get_contents($path), true );
@@ -147,6 +148,7 @@ foreach($courses as $course_name => &$lectures){
 		body { padding: 1em; color: #333; font-size: small; font-family: sans-serif; }
 		
 		h1 { font-size: 1.75em; margin: 0; padding: 0; }
+		h2 { font-size: 1.5em; margin: 1.5em 0 0 0; padding: 0; }
 		a { color: inherit; }
 		a:hover, a:focus, a:active { color: black; }
 		
@@ -200,8 +202,22 @@ foreach($courses as $course_name => &$lectures){
 
 <h1>MI ECTS Liste - Auswertung</h1>
 
+<p><?= $participant_count ?> Teilnehmer insgesamt</p>
+
+<ul>
 <? foreach($courses as $course_name => $lectures): ?>
-<h2><?= $course_name ?></h2>
+	<li><a href="#<?= urlencode($course_name) ?>"><?= $course_name ?></a></li>
+<?endforeach ?>
+</ul>
+
+<p>Auf Vorlesungen klicken um alle Einträge zu sehen. Legende:</p>
+<ul>
+	<li>Rot: Nur belegt um Punkte zu sammeln.</li>
+	<li>Gestrichelter Rahmen: Momentan im Stundenplan eingetragen.</li>
+</ul>
+
+<? foreach($courses as $course_name => $lectures): ?>
+<h2 id="<?= urlencode($course_name) ?>"><?= $course_name ?></h2>
 
 <table>
 	<tr>
