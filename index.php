@@ -1,5 +1,15 @@
 <?php
 
+// Poll is over, redirect to results
+$proto = $_SERVER['HTTPS'] ? 'https' : 'http';
+$server = $_SERVER['SERVER_NAME'];
+$path = dirname($_SERVER['PHP_SELF']);
+header("Location: $proto://$server$path/results.php", true, 302);
+exit();
+
+//
+// Original poll script
+//
 $user = basename($_SERVER['PHP_AUTH_USER']);
 $pass = $_SERVER['PHP_AUTH_PW'];
 

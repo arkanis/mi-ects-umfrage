@@ -1,65 +1,7 @@
 <?php
 
-//
-// Anonymize data
-// Later on we will do this once, save the result to a JSON file and delete all original data.
-// For now use the original data so people can see the current state.
-//
-
-$participant_count = count(glob("../../data/*.json"));
-$data = array();
-foreach( glob("../../data/*.json") as $path ){
-	$user_data = json_decode( file_get_contents($path), true );
-	$filtered_user_data = array();
-	
-	foreach($user_data as $key => $value){
-		// $edvnr_ps
-		// $edvnr_reason
-		// $edvnr_ps_forced
-		// $edvnr
-		if ( !preg_match('/^([^_]+)(_ps|_reason|_ps_forced||_reason)$/', $key, $matches) )
-			die("unkown key: $key!\n");
-		
-		list(, $edvnr, $suffix) = $matches;
-		$lecture_data = isset($filtered_user_data[$edvnr]) ? $filtered_user_data[$edvnr] : array(
-			'ects' => null,
-			'reason' => null,
-			'personal_schedule' => false,
-			'forced' => false
-		);
-		
-		switch($suffix){
-		case '_ps':
-			$lecture_data['ects'] = intval($value);
-			$lecture_data['personal_schedule'] = true;
-			break;
-		case '':
-			$lecture_data['ects'] = intval($value);
-			break;
-		case '_reason':
-			$lecture_data['reason'] = $value;
-			break;
-		case '_ps_forced':
-			$lecture_data['forced'] = true;
-			break;
-		}
-		
-		$filtered_user_data[$edvnr] = $lecture_data;
-	}
-	
-	foreach($filtered_user_data as $edvnr => $lecture_data){
-		if ( !isset($data[$edvnr]) )
-			$data[$edvnr] = array();
-		
-		if ( $lecture_data['ects'] !== null )
-			$data[$edvnr][] = $lecture_data;
-	}
-}
-
-// Shuffle lecture data of users to avoid identification via user name guessing and cross referencing
-foreach($data as $edvnr => &$lecture_data)
-	shuffle($lecture_data);
-
+// Load anonymized data
+$data = json_decode(file_get_contents("data.json"), true);
 
 //
 // Load, sort and merge course lecture lists
@@ -157,11 +99,11 @@ foreach($courses as $course_name => &$lectures){
 		
 		table th:nth-of-type(1) { width: 5em; }
 		table th:nth-of-type(2) { width: 32.5em; }
-		table th:nth-of-type(3), table th:nth-of-type(4), table th:nth-of-type(5), table th:nth-of-type(6) { width: 6.5em; }
-		table tr.records td { width: 63.5em; }
+		table th:nth-of-type(3), table th:nth-of-type(4), table th:nth-of-type(5) { width: 6.5em; }
+		table tr.records td { width: 57em; }
 		
 		table td { padding: 0.25em 0; }
-		table td:nth-of-type(3), table td:nth-of-type(4), table td:nth-of-type(5) { text-align: center; }
+		table td:nth-of-type(3), table td:nth-of-type(4) { text-align: center; }
 		
 		table tr.records ul { margin: 0 0 1em 0; padding: 0; list-style: none; }
 		table tr.records ul li { position: relative; margin: 0.5em 0; padding: 0; }
@@ -224,7 +166,6 @@ foreach($courses as $course_name => &$lectures){
 		<th>EDV-Nr.</th>
 		<th>Vorlesung</th>
 		<th>ECTS eingetragen</th>
-		<th><abbr title="Durschnittliche ECTS aller Einträge von Studenten">ECTS Durchschnitt</abbr></th>
 		<th>Einträge</th>
 		<th>Verteilung</th>
 	</tr>
@@ -233,12 +174,11 @@ foreach($courses as $course_name => &$lectures){
 		<td><?= $edvnr ?></td>
 		<td><a href="#"><?= $lecture['name'] ?></a></td>
 		<td><?= $lecture['ects'] ?></td>
-		<td><?= round($lecture['mean_ects']) ?></td>
 		<td><?= count($lecture['records']) ?></td>
 		<td class="distribution"><?= join(',', $lecture['distribution']) ?></span>
 	</tr>
 	<tr class="records">
-		<td colspan="6">
+		<td colspan="5">
 			<ul>
 <?				foreach($lecture['records'] as $record): ?>
 				<li>
